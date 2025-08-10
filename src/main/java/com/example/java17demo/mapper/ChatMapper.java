@@ -12,6 +12,4 @@ public interface ChatMapper {
 
     List<FriendsVo> getFriendsList(@Param("userId") Integer userId);
 
-    User getFriendInfo(@Param("friendId") Integer friendId);
-
 }

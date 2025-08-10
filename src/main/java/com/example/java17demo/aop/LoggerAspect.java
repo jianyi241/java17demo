@@ -97,45 +97,46 @@ public class LoggerAspect {
 
 // 获取所有 Cookies
         String token = TokenUtil.getToken(request);
-        log.info("Token ===>" + token);
+        log.info("Token ===>{}", token);
         MethodSignature methodSignature = (MethodSignature)point.getSignature();
         try {
             Method method = methodSignature.getMethod(); // 通过反射获得该方法
-            log.info("Method ===>" + method); // 获得自定义注解上面的值
+            log.info("Method ===>{}", method); // 获得自定义注解上面的值
             Auth auth = method.getDeclaredAnnotation(Auth.class); // 获得该注解
-            log.info("Annotation ===>" + auth); // 获得自定义注解上面的值
+            log.info("Annotation ===>{}", auth); // 获得自定义注解上面的值
             if (auth != null) {
                 if (token == null) {
                     return new ResultMap(401, "未授权", "");
                 }
-                if (token.length() > 0) {
+                if (!token.isEmpty()) {
                     Map<String,Object> authInfo = TokenUtil.verify(token);
                     Boolean isLogin = (Boolean) authInfo.get("requireAuth");
                     if (!isLogin) {
-                        log.info("\033[34mThe Logger After 403 ======");
-                        return new ResultMap(403, "未授权", "");
+                        log.info("\033[34mThe Logger After 401 ======");
+                        return new ResultMap(401, "授权过期", "");
                     } else {
                         try {
                             result = point.proceed(); // 执行该方法
                         } catch (Throwable e) {
-                            e.printStackTrace();
+                            log.error(e.getLocalizedMessage());
                         }
                     }
                 } else {
-                    log.info("\033[34mThe Logger After 403 ======");
+                    log.info("\033[34mThe Logger After 401 no token ======");
                     return new ResultMap(401, "未授权", "");
                 }
             } else {
                 try {
                     result = point.proceed(); // 执行该方法
                 } catch (Throwable e) {
-                    e.printStackTrace();
+                    log.error(e.getLocalizedMessage());
+
                 }
             }
         } catch (Exception e){
-            e.printStackTrace();
+            log.error(e.getLocalizedMessage());
         }
-        log.info("\033[34mThe Logger After ======>" + result);
+        log.info("\u001B[34mThe Logger After ======>{}", result);
         return result;
     }
 }

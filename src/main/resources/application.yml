@@ -38,13 +38,13 @@ server:
 image-url: http://localhost:9090/
 
 # MyBatis配置
-#mybatis:
-#    mapper-locations: classpath*:com/example/java17demo/mapper/*.xml
-#    type-aliases-package: com.example.java17demo.pojo
-#    configuration:
-#        map-underscore-to-camel-case: true
-#        log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
-#        # 开启 MyBatis 日志
+mybatis:
+    mapper-locations: classpath*:com/example/java17demo/mapper/*.xml
+    type-aliases-package: com.example.java17demo.pojo
+    configuration:
+        map-underscore-to-camel-case: true
+        log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+        # 开启 MyBatis 日志
 
 logging:
     level:

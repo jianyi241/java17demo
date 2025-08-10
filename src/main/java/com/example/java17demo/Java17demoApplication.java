@@ -6,7 +6,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
 
 @SpringBootApplication
-@MapperScan("com.example.java17demo.mapper")
+@MapperScan(basePackages = "com.example.java17demo.mapper")
 @EnableAspectJAutoProxy(exposeProxy=true)
 public class Java17demoApplication {
 
