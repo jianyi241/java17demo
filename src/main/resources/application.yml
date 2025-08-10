@@ -39,7 +39,7 @@ image-url: http://localhost:9090/
 
 # MyBatis配置
 mybatis:
-    mapper-locations: classpath*:com/example/java17demo/mapper/*.xml
+    mapper-locations: classpath:resources/com/example/java17demo/mapper/*.xml
     type-aliases-package: com.example.java17demo.pojo
     configuration:
         map-underscore-to-camel-case: true
