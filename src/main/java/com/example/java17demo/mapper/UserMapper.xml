@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.java17demo.mapper.UserMapper">
+
+    <resultMap id="userResultMap" type="com.example.java17demo.pojo.vo.UserVO">
+        <id property="id" column="id"/>
+        <result property="userName" column="user_name"/>
+        <result property="nickName" column="nick_name"/>
+        <result property="phoneNum" column="phone_num"/>
+        <result property="mail" column="mail"/>
+        <result property="avatar" column="avatar"/>
+        <result property="age" column="age"/>
+        <result property="gender" column="gender"/>
+        <result property="address" column="address"/>
+        <result property="roleId" column="role_id"/>
+        <result property="roleName" column="role_name"/>
+        <result property="nationId" column="nation_id"/>
+        <result property="nationName" column="nation_name"/>
+        <result property="creationTime" column="creation_time"/>
+        <result property="updateTime" column="update_time"/>
+    </resultMap>
+
+    <select id="getUserList" resultMap="userResultMap">
+        SELECT user.id, user.user_name,user.nick_name,user.phone_num,user.mail,user.avatar,user.age,user.gender,user.address,user.`creation_time`,user.`update_time`,role.id AS role_id,role.role_name, nation.id AS nation_id,nation.`nation_name` FROM `user`
+        LEFT JOIN role ON role.id = user.`role_id`
+        LEFT JOIN nation ON nation.id = user.`nation_id`
+        <where>
+            <if test="userName != null and userName != '' ">
+                AND user.user_name LIKE concat('%',#{userName},'%')
+            </if>
+            <if test="nickName != null and nickName != '' ">
+                AND user.nick_name LIKE concat('%',#{nickName},'%')
+            </if>
+            <if test="roleId != null">
+                AND role.id = #{roleId}
+            </if>
+            <if test="nationId != null">
+                AND nation.id = #{nationId}
+            </if>
+        </where>
+        ORDER BY user.id ASC
+        LIMIT #{pageNum},#{pageSize}
+    </select>
+
+    <select id="getUserTotalRecord" resultType="integer">
+        SELECT COUNT(*) FROM `user`
+        LEFT JOIN role ON role.id = user.`role_id`
+        LEFT JOIN nation ON nation.id = user.`nation_id`
+        <where>
+            <if test="userName != null and userName != '' ">
+                AND user.user_name LIKE concat('%',#{userName},'%')
+            </if>
+            <if test="nickName != null and nickName != '' ">
+                AND user.nick_name LIKE concat('%',#{nickName},'%')
+            </if>
+            <if test="roleId != null">
+                AND role.id = #{roleId}
+            </if>
+            <if test="nationId != null">
+                AND nation.id = #{nationId}
+            </if>
+        </where>
+    </select>
+
+    <select id="getUserInfo" resultMap="userResultMap">
+        SELECT user.id, user.user_name,user.nick_name,user.phone_num,user.mail,user.avatar,user.age,user.gender,user.address,user.`creation_time`,user.`update_time`,role.id AS role_id,role.role_name, nation.id AS nation_id,nation.`nation_name` FROM `user`
+        LEFT JOIN role ON role.id = user.`role_id`
+        LEFT JOIN nation ON nation.id = user.`nation_id` WHERE user.id = #{userId}
+    </select>
+
+    <select id="login" resultMap="userResultMap">
+        SELECT user.id, user.user_name,user.nick_name,user.phone_num,user.mail,user.avatar,user.age,user.gender,user.address,user.`creation_time`,user.`update_time`,role.id AS role_id,role.role_name, nation.id AS nation_id,nation.`nation_name` FROM `user`
+        LEFT JOIN role ON role.id = user.`role_id`
+        LEFT JOIN nation ON nation.id = user.`nation_id`
+        <where>
+            <if test="userName != null and userName != '' ">
+                AND user.user_name = #{userName}
+            </if>
+            <if test="password != null and password != '' ">
+                AND user.password = #{password}
+            </if>
+        </where>
+    </select>
+
+</mapper>

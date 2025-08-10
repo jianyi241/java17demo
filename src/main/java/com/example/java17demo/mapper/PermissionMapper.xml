@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.java17demo.mapper.PermissionMapper">
+
+    <resultMap id="permissionMap" type="com.example.java17demo.pojo.vo.RouterVO">
+        <id property="id" column="id"/>
+        <result property="key" column="id"/>
+        <result property="name" column="name"/>
+        <result property="path" column="path"/>
+        <result property="component" column="component"/>
+        <result property="navMenuId" column="nav_menu_id"/>
+        <result property="sort" column="sort"/>
+        <result property="parentId" column="parent_id"/>
+        <collection property="meta" ofType="com.example.java17demo.pojo.vo.RouterVO$Meta">
+            <result property="title" column="title"/>
+            <result property="icon" column="icon"/>
+            <result property="cache" column="cache"/>
+            <result property="menu" column="menu"/>
+            <result property="hidden" column="hidden"/>
+        </collection>
+    </resultMap>
+
+    <select id="getPermissionRouterList" resultMap="permissionMap">
+        SELECT router.id,
+               router.title,
+               router.name,
+               router.path,
+               router.component,
+               router.sort,
+               router.icon,
+               router.cache,
+               router.menu,
+               router.hidden,
+               router.parent_id,
+               router.nav_menu_id
+        FROM router
+                 RIGHT JOIN permission ON permission.router_id = router.id
+        WHERE permission.role_id = #{roleId}
+        ORDER BY router.sort ASC
+    </select>
+
+    <select id="getPermissionRouterAllList" resultMap="permissionMap">
+        SELECT id,
+               title,
+               name,
+               path,
+               component,
+               sort,
+               icon,
+               cache,
+               menu,
+               hidden,
+               parent_id,
+               nav_menu_id
+        FROM router
+        ORDER BY sort ASC
+    </select>
+    <insert id="insertRouter" parameterType="com.example.java17demo.pojo.Router">
+        INSERT INTO router (id, title, `name`, path, component, icon, `cache`, menu, hidden, parent_id, nav_menu_id,
+                            sort)
+        VALUES (NULL, #{title}, #{name}, #{path}, #{component}, #{icon}, #{cache}, #{menu}, #{hidden}, #{parentId},
+                #{navMenuId}, #{sort});
+    </insert>
+
+    <update id="updateRouter" parameterType="com.example.java17demo.pojo.Router">
+        UPDATE router
+        SET title=#{title},
+            `name`=#{name},
+            path=#{path},
+            component=#{component},
+            icon=#{icon},
+            `cache`=#{cache},
+            menu=#{menu},
+            hidden=#{hidden},
+            parent_id=#{parentId},
+            nav_menu_id=#{navMenuId},
+            sort=#{sort},
+            update_time=NOW()
+        WHERE id = #{id}
+    </update>
+
+</mapper>
